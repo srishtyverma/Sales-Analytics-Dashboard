@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Orders · Checkout{% endblock %}
+{% block page_title %}Orders{% endblock %}
+{% block page_badge %}{{ orders|length }} records{% endblock %}
+
+{% block head %}
+<style>
+  .join-banner {
+    background: rgba(108,99,255,0.08);
+    border: 1px solid rgba(108,99,255,0.25);
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    font-size: 0.8rem;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #9d96ff;
+  }
+  .join-banner code {
+    font-family: 'Courier New', monospace;
+    font-size: 0.78rem;
+    opacity: 0.8;
+  }
+  .join-icon { font-size: 1.1rem; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="join-banner">
+  <span class="join-icon">⟨/⟩</span>
+  <span>JOIN Query: <code>users ⟶ orders ⟶ order_items ⟶ products</code></span>
+</div>
+
+<form class="search-row" method="GET">
+  <input type="text" name="search" placeholder="Search customer or product…" value="{{ search }}">
+  <select name="status">
+    <option value="">All Statuses</option>
+    <option value="Pending"   {% if status_filter=='Pending'   %}selected{% endif %}>Pending</option>
+    <option value="Delivered" {% if status_filter=='Delivered' %}selected{% endif %}>Delivered</option>
+    <option value="Shipped"   {% if status_filter=='Shipped'   %}selected{% endif %}>Shipped</option>
+    <option value="Cancelled" {% if status_filter=='Cancelled' %}selected{% endif %}>Cancelled</option>
+  </select>
+  <button class="btn btn-primary" type="submit">Filter</button>
+  <a href="{{ url_for('orders') }}" class="btn btn-ghost">Reset</a>
+</form>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Customer</th>
+        <th>City</th>
+        <th>Product</th>
+        <th>Category</th>
+        <th>Qty</th>
+        <th>Item Price</th>
+        <th>Item Total</th>
+        <th>Order Total</th>
+        <th>Date</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for o in orders %}
+      <tr>
+        <td style="color:var(--muted);font-family:monospace">#{{ o.order_id }}</td>
+        <td><strong>{{ o.customer_name }}</strong></td>
+        <td><span class="tag tag-blue">{{ o.city }}</span></td>
+        <td>{{ o.product_name }}</td>
+        <td><span class="tag tag-purple">{{ o.category }}</span></td>
+        <td>{{ o.quantity }}</td>
+        <td>₹{{ '{:,.2f}'.format(o.item_price or 0) }}</td>
+        <td>₹{{ '{:,.2f}'.format(o.item_total or 0) }}</td>
+        <td>₹{{ '{:,.2f}'.format(o.total_amount or 0) }}</td>
+        <td style="color:var(--muted)">{{ o.order_date }}</td>
+        <td>
+          {% if o.order_status == 'Delivered' %}
+            <span class="tag tag-green">{{ o.order_status }}</span>
+          {% elif o.order_status == 'Pending' %}
+            <span class="tag tag-yellow">{{ o.order_status }}</span>
+          {% elif o.order_status == 'Cancelled' %}
+            <span class="tag tag-pink">{{ o.order_status }}</span>
+          {% else %}
+            <span class="tag tag-blue">{{ o.order_status }}</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="11" style="text-align:center;padding:32px;color:var(--muted)">No orders found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% block title %}Customers · Checkout{% endblock %}
+{% block page_title %}Customers{% endblock %}
+{% block page_badge %}{{ customers|length }} records{% endblock %}
+
+{% block content %}
+<form class="search-row" method="GET">
+  <input type="text" name="search" placeholder="Search name or email…" value="{{ search }}">
+  <select name="city">
+    <option value="">All Cities</option>
+    {% for c in cities %}
+    <option value="{{ c }}" {% if city_filter==c %}selected{% endif %}>{{ c }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary" type="submit">Search</button>
+  <a href="{{ url_for('customers') }}" class="btn btn-ghost">Reset</a>
+</form>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>City</th>
+        <th>Gender</th>
+        <th>Signup Date</th>
+        <th>Orders</th>
+        <th>Total Spent</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in customers %}
+      <tr>
+        <td style="color:var(--muted)">{{ c.user_id }}</td>
+        <td><strong>{{ c.name }}</strong></td>
+        <td style="color:var(--muted)">{{ c.email }}</td>
+        <td><span class="tag tag-blue">{{ c.city }}</span></td>
+        <td>
+          {% if c.gender == 'Male' %}
+            <span class="tag tag-purple">M</span>
+          {% elif c.gender == 'Female' %}
+            <span class="tag tag-pink">F</span>
+          {% else %}
+            <span class="tag tag-yellow">{{ c.gender or '—' }}</span>
+          {% endif %}
+        </td>
+        <td style="color:var(--muted)">{{ c.signup_date }}</td>
+        <td>{{ c.order_count }}</td>
+        <td>₹{{ '{:,.0f}'.format(c.total_spent or 0) }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">No customers found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

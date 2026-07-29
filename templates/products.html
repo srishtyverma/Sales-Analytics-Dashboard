@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block title %}Products · Checkout{% endblock %}
+{% block page_title %}Products{% endblock %}
+{% block page_badge %}{{ products|length }} items{% endblock %}
+
+{% block content %}
+<form class="search-row" method="GET">
+  <input type="text" name="search" placeholder="Search product or brand…" value="{{ search }}">
+  <select name="category">
+    <option value="">All Categories</option>
+    {% for cat in categories %}
+    <option value="{{ cat }}" {% if category_filter==cat %}selected{% endif %}>{{ cat }}</option>
+    {% endfor %}
+  </select>
+  <button class="btn btn-primary" type="submit">Search</button>
+  <a href="{{ url_for('products') }}" class="btn btn-ghost">Reset</a>
+</form>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Product Name</th>
+        <th>Category</th>
+        <th>Brand</th>
+        <th>Price</th>
+        <th>Units Sold</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td style="color:var(--muted)">{{ p.product_id }}</td>
+        <td><strong>{{ p.product_name }}</strong></td>
+        <td><span class="tag tag-purple">{{ p.category }}</span></td>
+        <td style="color:var(--muted)">{{ p.brand }}</td>
+        <td>₹{{ '{:,.2f}'.format(p.price or 0) }}</td>
+        <td>
+          {% if p.units_sold > 0 %}
+            <span class="tag tag-green">{{ p.units_sold }}</span>
+          {% else %}
+            <span style="color:var(--muted)">0</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No products found</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
