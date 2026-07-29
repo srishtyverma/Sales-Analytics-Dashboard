@@ -53,14 +53,14 @@ Four related tables (`users`, `products`, `orders`, `order_items`) connected via
 ## Preview
 
 <img width="929" height="411" alt="image" src="https://github.com/user-attachments/assets/f6f834e1-410a-4743-9afe-cbb71fee2cad" />
+
 <img width="918" height="415" alt="image" src="https://github.com/user-attachments/assets/25fe9c17-f86b-4efd-8b70-cf48f46c2acc" />
+
 <img width="926" height="419" alt="image" src="https://github.com/user-attachments/assets/13ea09ff-1713-46f6-861d-d91ce4f8b527" />
+
 <img width="931" height="407" alt="image" src="https://github.com/user-attachments/assets/55224c93-9dfd-4c22-b928-b34be96061e5" />
+
 <img width="932" height="347" alt="image" src="https://github.com/user-attachments/assets/6a59931c-e2c9-48b2-b548-26efc9cbe87e" />
-
-
-
-
 
 ## References
 
